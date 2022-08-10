@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 const { v4: uuidv4 } = require('uuid');
 
-const costumers = []
+const customers = []
 
 app.use(express.json());
 /*
@@ -14,21 +14,29 @@ app.use(express.json());
 app.post('/account',(request,response) => {
     const {cpf,name} = request.body;  
 
-    const costumersAlreadyExists = costumers.some(costumer => costumer.cpf === cpf);
+    const customerAlreadyExists = customers.some((costumer) => costumer.cpf === cpf);
 
-    if(costumersAlreadyExists) {
-        return response.status(400).json({msg:"costumer already exists!"})
+    if(customerAlreadyExists) {
+        return response.status(400).json({msg:"customer already exists!"})
     }
 
-    costumers.push({
+    customers.push({
         id: uuidv4(),
         cpf,
         name,
         statement: []
     });
 
-    return response.status(201).json({costumers:costumers})
+    return response.status(201).json({customers:customers})
 });
+
+app.get('/statement/:cpf',(request,response) => {
+    const {cpf} = request.params;
+
+    const customer = customers.find((customer) => customer.cpf === cpf);
+
+    return response.json(customer.statement);
+})
 
 app.listen(3333,()=>{
     console.log('app on');
