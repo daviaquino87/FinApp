@@ -42,7 +42,7 @@ app.post('/account',(request,response) => {
 app.get('/statement',verifyIfExistAccountCPF,(request,response) => {
     const {customer} = request;
     return response.json(customer.statement);
-})
+});
 
 app.post('/deposit',verifyIfExistAccountCPF,(request,response) => {
     const {description, amount} = request.body;
@@ -59,7 +59,7 @@ app.post('/deposit',verifyIfExistAccountCPF,(request,response) => {
     customer.statement.push(statementOperation);
 
     return response.status(201).send();
-})
+});
 
 app.post('/withdraw',verifyIfExistAccountCPF,(request,response) => {
     const {description,amount} = request.body;
@@ -75,7 +75,21 @@ app.post('/withdraw',verifyIfExistAccountCPF,(request,response) => {
     customer.statement.push(statementOperation);
 
     return response.status(201).send()
-})
+});
+
+app.get('/statement/date',verifyIfExistAccountCPF,(request,response) => {
+    const {customer} = request;
+    const {date} = request.query;
+
+    const dateFormat = new Date(date + " 00:00");
+
+    const statement = customer.statement.filter(
+        (statement) => 
+            statement.created_at.toDateString() ===
+                 new Date(dateFormat).toDateString());
+
+    return response.json(statement);
+});
 
 app.listen(3333,()=>{
     console.log('app on');
