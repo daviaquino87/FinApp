@@ -21,6 +21,6 @@
 - [x] Não deve ser possivel fazer depósitos em uma conta não existente
 - [x] Não deve ser possivel fazer saque em uma conta não existente
 - [x] Não deve ser possivel excluir uma conta não existente
-- [x] Não deve ser possivel fazer saque quando o saldo for insuficiente
+- [ ] Não deve ser possivel fazer saque quando o saldo for insuficiente
 
 <hr>
