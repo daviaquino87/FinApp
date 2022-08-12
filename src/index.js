@@ -10,7 +10,7 @@ const customers = []
 //Middleware
 
 function verifyIfExistAccountCPF(request,response,next){
-    const {cpf} = request.headers;
+    const { cpf } = request.headers;
     const customer = customers.find((customer) => customer.cpf === cpf);
     if(!customer){
         return response.status(400).json({error:"costumer not found!"});
@@ -36,7 +36,7 @@ app.post('/account',(request,response) => {
         statement: []
     });
 
-    return response.status(201).json({customers:customers})
+    return response.status(201).send()
 });
 
 app.get('/statement',verifyIfExistAccountCPF,(request,response) => {
@@ -89,6 +89,22 @@ app.get('/statement/date',verifyIfExistAccountCPF,(request,response) => {
                  new Date(dateFormat).toDateString());
 
     return response.json(statement);
+});
+
+app.put('/account',verifyIfExistAccountCPF,(request,response) => {
+    const { name } = request.body;
+    const {customer} = request;
+
+    customer.name = name
+
+    return response.status(201).send()
+})
+
+
+app.get('/account',verifyIfExistAccountCPF,(request,response) => {
+    const {customer} = request;
+
+    return response.json(customer);
 });
 
 app.listen(3333,()=>{
