@@ -38,7 +38,7 @@ app.post('/account',(request,response) => {
     const customerAlreadyExists = customers.some((costumer) => costumer.cpf === cpf);
 
     if(customerAlreadyExists) {
-        return response.status(400).json({msg:"customer already exists!"})
+        return response.status(400).json({msg:"customer already exists!"});
     }
 
     customers.push({
@@ -77,8 +77,13 @@ app.post('/withdraw',verifyIfExistAccountCPF,(request,response) => {
     const {description,amount} = request.body;
     const {customer} = request;
 
+    const balance = getBalance(customer.statement);
     
+    if(amount > balance){
+        return response.status(400).json({msg:"insufficient balance!"});
+    }
     
+
     const statementOperation = {
         description,
         amount,
